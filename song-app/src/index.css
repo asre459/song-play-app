@@ -1,0 +1,124 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url(https://images.https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&w=400.com/https://images.pexels.com/photos/2627945/pexels-photo-2627945.jpeg?auto=compress&cs=tinysrgb&w=400/53594/blue-clouds-day-fluffy-53594.jpeg?auto=compress&cs=tinysrgb&w=400);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+/* Set the background color for the entire body */
+body {
+  background-color: #269e4e;
+  
+}
+
+/* Set the background color for the app component specifically */
+.app1 {
+  background-color: #e0e0e0; /* Slightly different shade for the App component */
+}
+.head1{
+  background-color: #3f1cda;
+  text-align: center;
+  text-decoration: underline; /* Slightly different shade for the App component */
+}
+
+.home{
+}
+
+.started-btn{
+  margin: 40%;
+  justify-content: center;
+  align-items: center;
+  background-color: blue !important;
+  color: #cc2f2f;
+}
+input[type="text"]{
+  outline: none; 
+  border: 1px solid gold;
+  background-color: white;
+  border-radius: 6px;
+  text-align: center;
+  height: 30px;
+
+}
+input[type="file"]{
+  display: none;
+}
+
+.btn{
+  border: none;
+  border-radius: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px 30px;
+}
+.select-btn{
+  background-color: rgb(13, 230, 13);
+}
+
+.upload{
+  background-color: gold;
+
+  
+}
+
+.song-list-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-btn{
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 5px 10px;
+}
+
+.delete-btn{
+  background-color:red;
+  color: white;
+}
+
+.update-btn{
+  background-color: rgb(25, 0, 255);
+  color: white;
+  border-radius: 40;
+  font-size: 18px;
+  border-radius: 80%;
+}
+.actions{
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
+}
+.audio-list{
+  background-color: aqua;
+  color:blue;
+  padding: 10px;
+
+  
+}
+.navigation{
+  text-decoration: underline; /* Slightly different shade for the App component */
+  padding: 10px;
+  color: aqua;
+  
+}
+.form-group{
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: black;
+}
+
+
+
