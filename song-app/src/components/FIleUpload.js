@@ -15,7 +15,7 @@ const UploadWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 
   @media (max-width: 600px) {
     padding: 10px;
