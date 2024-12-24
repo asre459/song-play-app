@@ -21,7 +21,8 @@ const SongListWrapper = styled.div`
   ${typography}
   width: 100%;
   height: 100vh;
-  background-color: green;
+  background-color:rgba(0, 54, 179, 0.37);
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,7 +33,7 @@ const SongListWrapper = styled.div`
     border-radius: 8px;
     cursor: pointer;
     font-size: 20px;
-    padding: 5px 10px;
+    padding: 5px 5px;
   }
    .delete-btn{
     background-color: rgb(255, 10, 10);
@@ -49,8 +50,16 @@ const SongListWrapper = styled.div`
       }
   }
   .favorites-btn{
-      background-color: rgb(36, 132, 235);
-      margin: 20px auto;
+      background-color: hsl(236, 92.00%, 51.20%);
+      cursor: pointer;
+       display: flex;
+       align-items: center;
+       margin-bottom: 20px;
+      justify-content: center;
+       &:hover {
+        background-color:rgba(223, 216, 9, 0.82);
+      }
+
   }
 `;
 
@@ -85,8 +94,8 @@ const NavigationButtons = styled.div`
   justify-content: center;
   margin-top: 20px;
   gap: 30px;
-  background-color: rgba(41, 19, 235, 0.1);
-  color:rgba(247, 169, 208, 0.1);
+  background-color: rgba(181, 171, 245, 0.83);
+  color:rgba(247, 169, 208, 0.87);
 `;
 
 const FavoriteButton = styled(MdFavoriteBorder)`
@@ -110,7 +119,8 @@ const SongList = () => {
 
   useEffect(() => {
     dispatch(fetchSongsRequest());
-    fetchSongs();
+    fetchSongs();  
+      fetchFavorites();
   }, [dispatch]);
 
   const fetchSongs = async () => {
@@ -123,7 +133,14 @@ const SongList = () => {
       console.error("Error fetching songs:", error);
     }
   };
-
+  const fetchFavorites = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/songs/favorites");
+      setFavorites(response.data);
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+    }
+  };
   const handleDelete = (songId) => {
     const song = songLists.find((song) => song.id === songId);
 
@@ -167,17 +184,29 @@ const SongList = () => {
     fetchSongs();
   };
 
-  const handleAddToFavorites = (song) => {
-    if (!favorites.some((fav) => fav.id === song.id)) {
-      setFavorites([...favorites, song]);
-      message.success(`${song.title} added to favorites.`);
-    } else {
-      setFavorites(favorites.filter((fav) => fav.id !== song.id));
-      message.success(`${song.title} removed from favorites.`);
+  const handleAddToFavorites = async (song) => {
+    try {
+      const isFavorite = favorites.some((fav) => fav.title === song.title);
+  
+      if (isFavorite) {
+        const favorite = favorites.find((fav) => fav.title === song.title);
+        console.log('Removing favorite:', favorite);
+        await axios.delete(`http://localhost:5000/api/songs/favorites/${favorite.id}`);
+        message.success(`Removed "${song.title}" from favorites.`);
+      } else {
+        console.log('Adding to favorites:', song);
+        await axios.post("http://localhost:5000/api/songs/favorites", { title: song.title });
+        message.success(`Added "${song.title}" to favorites.`);
+      }
+  
+      fetchFavorites(); // Refresh favorites list
+    } catch (error) {
+      console.error("Error managing favorites:", error);
+      message.error("An error occurred while updating favorites.");
     }
   };
-
-  const handleShowFavorites = () => {
+  
+   const handleShowFavorites = () => {
     setIsFavoritesModalVisible(true);
   };
 
@@ -232,7 +261,7 @@ const SongList = () => {
                       <Button onClick={handlePrevious} disabled={songLists.length <= 1}>
                         {"<"}
                       </Button>
-                      <Button onClick={handleNext} disabled={songLists.length <= 1}>
+                      <Button onClick={handleNext} disabled={   songLists.length <= 1}>
                         {">"}
                       </Button>
                     </NavigationButtons>

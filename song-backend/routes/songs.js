@@ -14,15 +14,26 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, '../database'));
   },
   filename: (req, file, cb) => {
-    cb(null, path.basename(file.originalname));
+const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const originalName = path.basename(file.originalname);
+    cb(null, `${currentDate}-${originalName}`);
     
   },
 });
-const upload = multer({ storage });
-
+// const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /audio\/mpeg|audio\/mp3/;
+    if (!allowedTypes.test(file.mimetype)) {
+      return cb(new Error('Invalid file type. Only MP3 files are allowed.'));
+    }
+    cb(null, true);
+  },
+});
 // Serve static files
 router.use('/files', express.static(path.join(__dirname, '../database')));
-
+router.use('/favorites', express.static(path.join(__dirname, '../database/favorites')));
 // Upload a new song
 router.post('/upload', upload.single('file'), (req, res) => {
   const { filename } = req.file;
@@ -41,6 +52,51 @@ router.post('/upload', upload.single('file'), (req, res) => {
 // Fetch all songs
 router.get('/', (req, res) => {
   res.json(songs);
+});
+router.get('/favorites', (req, res) => {
+  const favoritesPath = path.join(__dirname, '../database/favorites');
+  if (!fs.existsSync(favoritesPath)) {
+    fs.mkdirSync(favoritesPath);
+  }
+
+  const favoriteFiles = fs.readdirSync(favoritesPath).map((file, index) => ({
+    id: index + 1,
+    title: file,
+    desc: 'Favorite song',
+  }));
+
+  res.json(favoriteFiles);
+});
+
+// Add to favorites
+router.post('/favorites', (req, res) => {
+  const { title } = req.body;
+
+  const sourcePath = path.join(__dirname, '../database', title);
+
+  const targetPath = path.join(__dirname, '../database/favorites', title);
+
+  if (fs.existsSync(sourcePath) && !fs.existsSync(targetPath)) {
+    fs.copyFileSync(sourcePath, targetPath);
+    res.json({ message: 'Added to favorites successfully.' });
+  } else {
+    res.status(400).json({ message: 'Song already in favorites or not found.' });
+  }
+});
+
+// Remove from favorites
+router.delete('/favorites/:id', (req, res) => {
+  const { id } = req.params;
+  const favoritesPath = path.join(__dirname, '../database/favorites');
+  const favoriteFiles = fs.readdirSync(favoritesPath);
+  const fileToRemove = favoriteFiles[id - 1];
+
+  if (fileToRemove) {
+    fs.unlinkSync(path.join(favoritesPath, fileToRemove));
+    res.json({ message: 'Removed from favorites successfully.' });
+  } else {
+    res.status(404).json({ message: 'Favorite not found.' });
+  }
 });
 
 

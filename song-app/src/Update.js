@@ -7,9 +7,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { space, layout, typography, color } from "styled-system";
-
 const { confirm } = Modal;
-
 const UpdateWrapper = styled.div`
   ${space}
   ${layout}
@@ -17,8 +15,8 @@ const UpdateWrapper = styled.div`
   ${color}
   padding: 20px;
   width: 100vw;
+  background-color:rgba(0, 54, 179, 0.37);
   height: 100vh;
-  background-color:rgb(58, 184, 79);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -28,23 +26,29 @@ const UpdateWrapper = styled.div`
 `;
 
 const AudioPlayerWrapper = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   display: flex;
   align-items: center;
   width: 400px;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+
+  border-radius: 8px;
 `;
 
 const FormGroup = styled.div`
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
+  
 `;
 
 const Label = styled.label`
   margin-bottom: 5px;
   font-weight: bold;
-  font-size: 14px;
-  color: #333;
+  font-size: 16px;
+  color: hsla(178, 79.60%, 32.70%, 0.90)
   text-transform: uppercase;
 `;
 
@@ -72,8 +76,9 @@ const StyledButton = styled(Button)`
   border-radius: 10px
 `;
 
-const Update = ({ song, onUpdateComplete }) => {
-  const [newTitle, setNewTitle] = useState(song?.title || "");
+const Update = ({ song, onUpdateComplete}) => {
+  let fileName = song.title;
+  const [newTitle, setNewTitle] = useState(fileName || "");
   const [newDesc, setNewDesc] = useState(song?.desc || "");
 
   useEffect(() => {

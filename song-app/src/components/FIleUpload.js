@@ -1,6 +1,4 @@
 
-
-// export default FileUpload;
 /** @jsxImportSource @emotion/react */
 import React, { useState } from "react";
 import axios from "axios";
@@ -26,8 +24,10 @@ const Title = styled.h2`
   ${typography}
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 30px;
   text-align: center;
+  color: #222;
 `;
 
 const Subtitle = styled.h3`
@@ -35,6 +35,7 @@ const Subtitle = styled.h3`
   font-size: 20px;
   margin-bottom: 15px;
   text-align: center;
+  color: hsla(252, 85.80%, 49.80%, 0.94)
 `;
 
 const InputGroup = styled.div`

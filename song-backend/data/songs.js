@@ -1,6 +1,6 @@
 
 const songs = [{
-     id:'', title: '', artist: '', album:'', genre: '', desc:'',
+     id:'', title: '', desc:''
 }
   ];
   

@@ -19,7 +19,7 @@ const Home = () => {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color:rgb(174, 213, 248);
+  background-color:rgba(219, 224, 220, 0.48);
     font-family: "Roboto", sans-serif;
     text-align: center;
   `;
