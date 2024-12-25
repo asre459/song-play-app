@@ -77,12 +77,13 @@ const StyledButton = styled(Button)`
 `;
 
 const Update = ({ song, onUpdateComplete}) => {
-  let fileName = song.title;
-  const [newTitle, setNewTitle] = useState(fileName || "");
+  let fileName = (song.title).indexOf(".");
+  let title = (song.title).slice(0, fileName);
+  const [newTitle, setNewTitle] = useState(title || "");
   const [newDesc, setNewDesc] = useState(song?.desc || "");
 
   useEffect(() => {
-    setNewTitle(song?.title || "");
+    setNewTitle(title||"");
     setNewDesc(song?.desc || "");
   }, [song]);
 

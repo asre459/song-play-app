@@ -8,7 +8,8 @@ import { Modal, Button, message } from "antd";
 import axios from "axios";
 import FileUpload from "./FIleUpload.js";
 import Update from "../Update.js";
-import { MdDeleteForever, MdFavoriteBorder } from "react-icons/md";
+import { FaHeart } from "react-icons/fa";
+import { MdDeleteForever} from "react-icons/md";
 import styled from "@emotion/styled";
 import { space, color, layout, typography } from "styled-system";
 
@@ -59,7 +60,10 @@ const SongListWrapper = styled.div`
        &:hover {
         background-color:rgba(223, 216, 9, 0.82);
       }
-
+  }
+  .loading, .error{
+    color: red;
+    fontSize: 30px;
   }
 `;
 
@@ -98,12 +102,12 @@ const NavigationButtons = styled.div`
   color:rgba(247, 169, 208, 0.87);
 `;
 
-const FavoriteButton = styled(MdFavoriteBorder)`
+const FavoriteButton = styled(FaHeart)`
   color: ${({ isFavorite }) => (isFavorite ? "red" : "white")};
   cursor: pointer;
   font-size: 30px;
   &:hover{
-    color: ${({ isFavorite }) => (!isFavorite && "gold")};
+    color: ${({ isFavorite }) => (!isFavorite ? "gold" : "darked")};
   }
 `;
 
@@ -114,6 +118,9 @@ const SongList = () => {
   const [selectedSong, setSelectedSong] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [isFavoritesModalVisible, setIsFavoritesModalVisible] = useState(false);
+  const [prevDisable, setPrevDisable] = useState(true);
+  const [nextDisable, setNextDisable] = useState(false);
+
   const { loading, error } = useSelector((state) => state.songs);
   const dispatch = useDispatch();
 
@@ -165,12 +172,26 @@ const SongList = () => {
     });
   };
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % songLists.length);
+  const handleNext = (id) => {
+    setPrevDisable(false);
+    if(id === 1){
+      message.warning("This is Last Song!!!");
+      setNextDisable(true);
+    }else{
+      setNextDisable(false);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % songLists.length);
+    }
   };
 
-  const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + songLists.length) % songLists.length);
+  const handlePrevious = (id) => {
+    setNextDisable(false);
+    if(id === songLists.length){
+        message.warning("No Previous Song!!!");
+        setPrevDisable(true);
+    }else{
+      setPrevDisable(false);
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + songLists.length) % songLists.length);
+    }
   };
 
   const handleEdit = (song) => {
@@ -223,10 +244,9 @@ const SongList = () => {
       ) : (
         <div>
           <FileUpload fetchSongs={fetchSongs} />
-
           {loading && <div className="loading">Loading...</div>}
           {error && <div className="error">Error: {error}</div>}
-          {songLists.length > 0 ? (
+          {(songLists.length > 0 && !error) ? (
             <div>
               <h3>Uploaded Songs</h3>
               {currentSong && (
@@ -254,14 +274,14 @@ const SongList = () => {
                     <button className="btn edit-btn"
                       onClick={() => handleEdit(currentSong)}>
                       Edit
-                    </button>
+                  </button>
                   </ActionButtonsWrapper>
                   {songLists.length > 1 && (
                     <NavigationButtons>
-                      <Button onClick={handlePrevious} disabled={songLists.length <= 1}>
+                      <Button onClick={()=>handlePrevious(currentSong.id)} className="prev" style={{backgroundColor: {prevDisable} && 'gold'}} disabled={prevDisable}>
                         {"<"}
                       </Button>
-                      <Button onClick={handleNext} disabled={   songLists.length <= 1}>
+                      <Button onClick={()=>handleNext(currentSong.id)} className="next" style={{backgroundColor: {nextDisable} && 'gold'}} disabled={nextDisable}>
                         {">"}
                       </Button>
                     </NavigationButtons>

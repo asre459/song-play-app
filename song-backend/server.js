@@ -18,7 +18,7 @@ app.use((err, req, res, next) => {
 app.use(bodyParser.json());
 // Serve uploaded files in the "database" folder
 app.use('/uploads', express.static(path.join(__dirname, 'database')));
-// Routes
+.98// Routes
 app.use('/api/songs', songRoutes);
 
 app.listen(PORT, () => {
