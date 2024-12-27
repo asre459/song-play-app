@@ -49,8 +49,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
   const { filename } = req.file;
   const title = req.body.title || filename;
   const desc = req.body.desc || 'No descriptions are here';
-
-  const newSong = {
+   const newSong = {
     id: songs.length + 1,
     title,
     desc,
