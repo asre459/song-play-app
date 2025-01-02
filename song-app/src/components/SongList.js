@@ -120,7 +120,6 @@ const SongList = () => {
   const [isFavoritesModalVisible, setIsFavoritesModalVisible] = useState(false);
   const [prevDisable, setPrevDisable] = useState(true);
   const [nextDisable, setNextDisable] = useState(false);
-
   const { loading, error } = useSelector((state) => state.songs);
   const dispatch = useDispatch();
 
@@ -136,6 +135,7 @@ const SongList = () => {
       setSongLists(
         response.data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       );
+      console.log( "the recent song list store at the top of the list")
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
@@ -207,10 +207,10 @@ const SongList = () => {
 
   const handleAddToFavorites = async (song) => {
     try {
-      const isFavorite = favorites.some((fav) => fav.title === song.title);
+      const isFavorite = favorites.some((fav) => fav.id === song.id);
   
       if (isFavorite) {
-        const favorite = favorites.find((fav) => fav.title === song.title);
+        const favorite = favorites.find((fav) => fav.id=== song.id);
         console.log('Removing favorite:', favorite);
         await axios.delete(`http://localhost:5000/api/songs/favorites/${favorite.id}`);
         message.success(`Removed "${song.title}" from favorites.`);
